@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Layout, Row, Col } from 'antd';
+import Avatar  from './components/Upload/Upload'
 import 'antd/dist/antd.css';
 import './App.css';
 
@@ -27,7 +28,7 @@ class App extends Component {
         <Row>
           <Col span={14} offset={5}>
             <div className="container">
-              
+              <Avatar/>
             </div>
           </Col>
         </Row>
