@@ -2,10 +2,22 @@
   text-align: center;
   background-image: url("/images/photography/photography.png");
   min-height: 100vh;
+  color: black;
 }
 
 .logo {
   font-size: 30pt;
-  padding: 20px;
+  padding-top: 60px;
+  padding-bottom: 30px;
   font-family: 'Baloo Chettan', cursive;
+}
+
+.container {
+  min-height: 70vh;
+  margin: 30px 0;
+  padding-top: 30pt;
+  height: 80%;
+  /* border: 1pt solid red; */
+  border-radius: 10pt;
+  background-color: rgba(0, 0, 0, .8);
 }

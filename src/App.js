@@ -1,34 +1,40 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Layout, Row, Col } from 'antd';
+import 'antd/dist/antd.css';
 import './App.css';
 
-const { Header, Footer, Content } = Layout;
+class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      test: true
+    }
+  }
+    render() {
+    return (
+      <div className="App">
+        <Row>
+          <Col span={8} offset={8}>
+            <div className="logo">
+              <span role="img" aria-label="thumbs up emoji">👍</span>
+              Thumbpic
+              <span role="img" aria-label="thumbs up emoji">📸</span>
+            </div>
+          </Col>
+        </Row>
 
-function App() {
-  return (
-    <div className="App">
-      <Layout>
-        <Header>
-          <Row>
-            <Col span={8} offset={8}>
-              <div className="logo">
-                <span role="img" aria-label="thumbs up emoji">👍</span>
-                Thumbpic
-                <span role="img" aria-label="thumbs up emoji">📸</span>
-              </div>
-            </Col>
-          </Row>
-        </Header>
-        <Content>
-          <div className="container">
-            {/* <Row> <Link></Link><Button>TV</Button></Row> */}
-            
-          </div>
-        </Content>
-        <Footer style={{ backgroundColor: '#03152a' }}>Footer</Footer>
-      </Layout>
-    </div>
-  );
+        
+        <Row>
+          <Col span={14} offset={5}>
+            <div className="container">
+              
+            </div>
+          </Col>
+        </Row>
+
+      </div>
+    );
+  }
 }
 
 export default App;
