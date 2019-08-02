@@ -1,16 +1,19 @@
 import React, { Component } from 'react';
-import { Layout, Row, Col } from 'antd';
+import { Row, Col } from 'antd';
 import Avatar  from './components/Upload/Upload'
+import AWS from "aws-sdk";
 import 'antd/dist/antd.css';
 import './App.css';
 
 class App extends Component {
+  
   constructor() {
     super();
     this.state = {
       test: true
     }
   }
+
     render() {
     return (
       <div className="App">
