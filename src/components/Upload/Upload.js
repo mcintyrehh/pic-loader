@@ -27,8 +27,30 @@ function beforeUpload(file) {
 class Avatar extends Component {
   state = {
         loading: false,
+        infoText: ""
     };
-  
+  componentDidMount = () => {
+    // AWS.config.update({
+    //   accessKeyId: "AKIASDJJ62MMS4IGTSIH",
+    //   secretAccessKey: "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"
+    // });
+    //beginning of logic to return uploaded files, needs to be finished
+    // const S3GET = new AWS.S3();
+    // const getParams = {
+    //   Bucket: "pic-loader",
+    //   Delimiter: '',
+    //   Prefix: '/resonanceinterviewtest'
+    // }
+    // S3GET.getObject(getParams, function(err, data) {
+    // // Handle any error and exit
+    // if (err)
+    //     return err;
+    // // No error happened
+    // // Convert Body from a Buffer to a String
+    // let objectData = data.Body.toString('utf-8'); // Use the encoding necessary
+    // console.log(objectData);
+    // })
+  }
   customRequest({
     action,
     data,
@@ -42,9 +64,7 @@ class Avatar extends Component {
   }) {
     AWS.config.update({
       accessKeyId: "AKIASDJJ62MMS4IGTSIH",
-      secretAccessKey: "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",
-      // sessionToken:
-      //   "FQoGZXIvYXdzEGYaDDbXffvy9/DNV7DXvyLNAq9mOtFiIbUAE33I2H0mArBo8wTtDMkSYDLVcKKuAvl43UA6KI46BKNENFvCKuAPu2bgSL2SDiuLzJQvdo1Vai/5VjZ4Bd1TWsCRN1hz+tIaJcjoxrXoaPF+YU/DELKwSObUAeZjk5d6uvPRRc4kzpaAkKqFcJwh3VYpBobJzerS/GfQ8IMNq5On1phry6S23o3IeU9TdRQKXg9OU5hBWB7ZSNiLqDRpc6nfsG/EX9lkvzNh5f/8JueZem1JAIgf6r9w7MvFYfUFJw3kmSjYXXZrusgR9l5z+fMvhQUl0w7XzKPZuokl03vY5V+ZmxL6UXHvjeV+qNolbIp983TbCUfMQEiBU+SnmhfSYNGGq3FQGYK5wj1cIDuEy4tOrU5J0ZQjFwogEie2n6fD8muMeYltQXeZ8iekOQLEdbW58uR87dXXQvgbtSpd3BHk5CiDsJriBQ=="
+      secretAccessKey: "iUUdn9HWXJXKsSz3mLUn4OMjTTXOQRzJ2PDET20L"
     });
 
     const S3 = new AWS.S3();
@@ -53,7 +73,7 @@ class Avatar extends Component {
 
     const objParams = {
       Bucket: "pic-loader",
-      Key: "resonanceinterviewtest" + "/" + file.name,
+      Key: "resonanceinterviewtest" + "/uploads/" + file.name,
       Body: file,
       ContentType: file.type // TODO: You should set content-type because AWS SDK will not automatically set file MIME
     };
@@ -105,7 +125,7 @@ class Avatar extends Component {
     );
     const { imageUrl } = this.state;
     return (
-      <Upload
+     <Upload
         customRequest={this.customRequest}
         name="avatar"
         listType="picture-card"
