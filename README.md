@@ -13,7 +13,7 @@
 * React app bootstrapped with create-react-app
 * Basic front end skeleton created, using Ant Design UI framework 
 * Created an AWS S3 bucket, opened for public access, CORS enabled from all ( * ) origins, and for GET, POST, PUT methods
-* 
+* When the user uploads a picture it is successfully uploading to the S3 bucket!
 
 
 ## Whats left ##
