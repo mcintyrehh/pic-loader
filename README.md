@@ -1,3 +1,12 @@
+To pull: git clone https://github.com/mcintyrehh/pic-loader.git
+then 
+
+`cd pic-loader`
+
+`npm install`
+
+`npm run start`
+
 ### Resonance Interview Test ###
 
 * Build a basic file upload and view interface w/ AWS services
