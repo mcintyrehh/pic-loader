@@ -31,8 +31,8 @@ class Avatar extends Component {
     };
   componentDidMount = () => {
     // AWS.config.update({
-    //   accessKeyId: "AKIASDJJ62MMS4IGTSIH",
-    //   secretAccessKey: "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"
+    //   accessKeyId: "",
+    //   secretAccessKey: ""
     // });
     //beginning of logic to return uploaded files, needs to be finished
     // const S3GET = new AWS.S3();
@@ -63,8 +63,8 @@ class Avatar extends Component {
     withCredentials
   }) {
     AWS.config.update({
-      accessKeyId: "AKIASDJJ62MMS4IGTSIH",
-      secretAccessKey: "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"
+      accessKeyId: "",
+      secretAccessKey: ""
     });
 
     const S3 = new AWS.S3();
