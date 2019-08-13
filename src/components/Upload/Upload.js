@@ -43,9 +43,10 @@ class Avatar extends Component {
 
     const objParams = {
       Bucket: process.env.REACT_APP_BUCKET,
-      Key: process.env.REACT_APP_BUCKET_KEY + this.state.fileName,
+      Key: process.env.REACT_APP_BUCKET_KEY + fileName,
       Body: this.state.fileData,
-      ContentType: this.state.fileData.type // TODO: You should set content-type because AWS SDK will not automatically set file MIME
+      ContentType: this.state.fileData.type, // TODO: You should set content-type because AWS SDK will not automatically set file MIME
+      ACL:'public-read'
     };
     const updateURL = (url) => {
       this.setState({imageUrl: url})
@@ -60,7 +61,7 @@ class Avatar extends Component {
         } else {
           console.log("SEND FINISHED");
           console.log(fileName);
-          let payloadJSON = {
+          const payloadJSON = {
             "Records":[  
               {  
                 "eventVersion":"2.0",
@@ -141,7 +142,6 @@ class Avatar extends Component {
             <Row>
               <Col span={20} offset={2} className="formColumn">
                 <div className="form-container" style={{backgroundImage: `url(${this.state.imageUrl || this.displayIcons.default.url})`}}> </div>
-                <div>{this.state.loaded}</div>
                   <form className="form" method="post" action="#" id="#">
                     <input
                       type="file" 
