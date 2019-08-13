@@ -13,9 +13,10 @@
 }
 
 .container {
-  min-height: 70vh;
+  /* min-height: 40vh; */
   margin: 30px 0;
-  padding-top: 30pt;
+  padding-top: 30px;
+  padding-bottom: 30px;
   height: 80%;
   /* border: 1pt solid red; */
   border-radius: 10pt;
