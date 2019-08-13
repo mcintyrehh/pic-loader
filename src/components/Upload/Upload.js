@@ -1,18 +1,11 @@
-
 import React, { Component } from 'react';
 import 'antd/dist/antd.css';
 import './upload.css';
 import AWS from 'aws-sdk';
-import { Row, Col, message } from 'antd';
-import { reject } from 'q';
+import { Row, Col } from 'antd';
+
 
 require('dotenv').config();
-
-// function getBase64(img, callback) {
-//   const reader = new FileReader();
-//   reader.addEventListener('load', () => callback(reader.result));
-//   reader.readAsDataURL(img);
-// }
 
 class Avatar extends Component {
   constructor(props) {
@@ -25,7 +18,6 @@ class Avatar extends Component {
         generating: false,
         loadingStatus: "default",
     };
-    this.onClickHandler = this.onClickHandler.bind(this);
   }
   displayIcons = {
     default: {
@@ -37,7 +29,6 @@ class Avatar extends Component {
     compressing: {
       url: "https://media3.giphy.com/media/jncdxhzZ5ZaAfNUvXG/giphy.gif?cid=790b7611f8213e99554115b2633b9e7b8f9cbff13206c7df&rid=giphy.gif"
     }
-
   }
 
   aWSLogic = (object, fileName) => {
@@ -129,7 +120,6 @@ class Avatar extends Component {
         Payload: JSON.stringify(payloadJSON)
       }
       lambda.invoke(lambdaParams, (err, data) => {
-
         if (err) console.log(err, err.stack); // an error occurred
         else {
           toggleGenerating();
@@ -138,74 +128,7 @@ class Avatar extends Component {
           updateURL(`https://pic-loader.s3.amazonaws.com/uploadsresized/resized-${fileName}`)
         };
       });
-
     })
-
-    // S3.putObject(objParams)
-    //   .send(function(err, data) {
-    //     if (err) {
-    //       console.log("Something went wrong");
-    //       console.log(err.code);
-    //       console.log(err.message);
-    //     } else {
-    //       console.log("SEND FINISHED");
-    //       console.log(fileName);
-    //       const payloadJSON = {
-    //         "Records":[  
-    //           {  
-    //             "eventVersion":"2.0",
-    //             "eventSource":"aws:s3",
-    //             "awsRegion":"us-west-2",
-    //             "eventTime":"1970-01-01T00:00:00.000Z",
-    //             "eventName":"ObjectCreated:Put",
-    //             "userIdentity":{  
-    //               "principalId":"AIDAJDPLRKLG7UEXAMPLE"
-    //             },
-    //             "requestParameters":{  
-    //               "sourceIPAddress":"127.0.0.1"
-    //             },
-    //             "responseElements":{  
-    //               "x-amz-request-id":"C3D13FE58DE4C810",
-    //               "x-amz-id-2":"FMyUVURIY8/IgAtTv8xRjskZQpcIZ9KG4V5Wp6S7S/JRWeUWerMUE5JgHvANOjpD"
-    //             },
-    //             "s3":{  
-    //               "s3SchemaVersion":"1.0",
-    //               "configurationId":"testConfigRule",
-    //               "bucket":{  
-    //                 "name":"pic-loader/uploads",
-    //                 "ownerIdentity":{  
-    //                   "principalId":"A3NL1KOZZKExample"
-    //                 },
-    //                 "arn":"arn:aws:s3:::pic-loader/uploads"
-    //               },
-    //               "object":{  
-    //                 "key":fileName,
-    //                 "size":1024,
-    //                 "eTag":"d41d8cd98f00b204e9800998ecf8427e",
-    //                 "versionId":"096fKKXTRTtl3on89fVO.nfljtsv6qko"
-    //               }
-    //             }
-    //           }
-    //         ]
-    //       }
-    //       console.log(payloadJSON);
-    //       const lambdaParams = {
-    //         FunctionName:'CreateThumbnail',
-    //         InvocationType: "Event",
-    //         Payload: JSON.stringify(payloadJSON)
-    //       }
-    //       lambda.invoke(lambdaParams, (err, data) => {
-
-    //         if (err) console.log(err, err.stack); // an error occurred
-    //         else {
-    //           console.log(lambdaParams);
-    //           console.log(data);
-    //           updateURL(`https://pic-loader.s3.amazonaws.com/uploadsresized/resized-${fileName}`)
-    //         };
-    //       });
-        
-    //     }
-    //   });
   }
   handleChange = info => {
     console.log(info.target.files[0])
@@ -217,8 +140,6 @@ class Avatar extends Component {
   };
   onClickHandler = () => {
     console.log(this.state.fileData.name);
-
-
     this.aWSLogic(this.state.fileData, this.state.fileData.name);
   }
 
@@ -231,15 +152,14 @@ class Avatar extends Component {
             <Row>
               <Col span={20} offset={2} className="formColumn">
                 <div className="form-container" style={{backgroundImage: `url(${this.state.generating ? this.displayIcons.loading.url : (this.state.imageUrl || this.displayIcons.default.url) })`}}> </div>
-                  <form className="form" method="post" action="#" id="#">
-                    <input
-                      {...this.props}
-                      type="file" 
-                      className="form-control" 
-                      multiple=""
-                      onChange={this.handleChange}/>
-                  </form>
-
+                <form className="form" method="post" action="#" id="#">
+                  <input
+                    {...this.props}
+                    type="file" 
+                    className="form-control" 
+                    multiple=""
+                    onChange={this.handleChange}/>
+                </form>
               </Col>
             </Row>
             <Row>
@@ -251,16 +171,12 @@ class Avatar extends Component {
                     Upload
                 </button>
               </Col>
-        </Row>
+            </Row>
           </Col>
 	      </Row>
-
       </div>
-        
-
     );
   }
 }
 
 export default Avatar;
-          
