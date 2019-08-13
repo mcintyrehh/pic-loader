@@ -7,24 +7,11 @@ import { Row, Col, message } from 'antd';
 
 require('dotenv').config();
 
-function getBase64(img, callback) {
-  const reader = new FileReader();
-  reader.addEventListener('load', () => callback(reader.result));
-  reader.readAsDataURL(img);
-}
-
-function beforeUpload(file) {
-  const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-  if (!isJpgOrPng) {
-    message.error('You can only upload JPG/PNG file!');
-  }
-  //File can be up to 1GB in size, divides total bytes 3 factors of 1024
-  const isLt2M = file.size / 1024 / 1024 / 1024 < 1;
-  if (!isLt2M) {
-    message.error('Image must smaller than 1GB!');
-  }
-  return isJpgOrPng && isLt2M;
-}
+// function getBase64(img, callback) {
+//   const reader = new FileReader();
+//   reader.addEventListener('load', () => callback(reader.result));
+//   reader.readAsDataURL(img);
+// }
 
 class Avatar extends Component {
   constructor(props) {
@@ -37,23 +24,18 @@ class Avatar extends Component {
     };
     this.onClickHandler = this.onClickHandler.bind(this);
   }
-
-  handleChange = info => {
-    console.log(info.target.files[0])
-    const file = info.target.files[0]
-    this.setState({
-      fileData: file,
-      loaded: 0,
-    })
-  };
-  onClickHandler = () => {
-    console.log(this.state.fileData.name);
+  displayIcons = {
+    default: {
+      url: "https://image.flaticon.com/icons/png/128/109/109612.png"
+    }
+  }
+  aWSLogic = (object, fileName) => {
+    AWS.config.logger = console;
     AWS.config.update({
       accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
       secretAccessKey: process.env.REACT_APP_AWS_SECRET_KEY,
       region: 'us-east-1'
     });
-
     const S3 = new AWS.S3();
     const lambda = new AWS.Lambda();
     console.log("DEBUG filename", this.state.fileData.name);
@@ -65,6 +47,10 @@ class Avatar extends Component {
       Body: this.state.fileData,
       ContentType: this.state.fileData.type // TODO: You should set content-type because AWS SDK will not automatically set file MIME
     };
+    const updateURL = (url) => {
+      this.setState({imageUrl: url})
+      console.log(this.state.imageUrl);
+    }
     S3.putObject(objParams)
       .send(function(err, data) {
         if (err) {
@@ -73,7 +59,8 @@ class Avatar extends Component {
           console.log(err.message);
         } else {
           console.log("SEND FINISHED");
-          const payload = {
+          console.log(fileName);
+          let payloadJSON = {
             "Records":[  
               {  
                 "eventVersion":"2.0",
@@ -102,7 +89,7 @@ class Avatar extends Component {
                     "arn":"arn:aws:s3:::pic-loader/uploads"
                   },
                   "object":{  
-                    "key":this.state.fileData.name,
+                    "key":fileName,
                     "size":1024,
                     "eTag":"d41d8cd98f00b204e9800998ecf8427e",
                     "versionId":"096fKKXTRTtl3on89fVO.nfljtsv6qko"
@@ -111,22 +98,38 @@ class Avatar extends Component {
               }
             ]
           }
+          console.log(payloadJSON);
           const lambdaParams = {
             FunctionName:'CreateThumbnail',
             InvocationType: "Event",
-            Payload: JSON.stringify(payload)
+            Payload: JSON.stringify(payloadJSON)
           }
       
           lambda.invoke(lambdaParams, (err, data) => {
             if (err) console.log(err, err.stack); // an error occurred
             else {
+              console.log(lambdaParams);
               console.log(data);
-              // this.setState({imageUrl: `https://pic-loader.s3.amazonaws.com/uploadsresized/resized-${this.fileData.name}`})
+              updateURL(`https://pic-loader.s3.amazonaws.com/uploadsresized/resized-${fileName}`)
             };
           });
         
         }
       });
+  }
+  handleChange = info => {
+    console.log(info.target.files[0])
+    const file = info.target.files[0]
+    this.setState({
+      fileData: file,
+      loaded: 0,
+    })
+  };
+  onClickHandler = () => {
+    console.log(this.state.fileData.name);
+
+
+    this.aWSLogic(this.state.fileData, this.state.fileData.name);
   }
 
   render() {
@@ -135,28 +138,33 @@ class Avatar extends Component {
       <div>
 	      <Row>
           <Col span={12} offset={6}>
-            <form className="form" method="post" action="#" id="#">
-              <div className="form-group files color">
-                <label>Upload Your File </label>
-                <input 
-                  type="file" 
-                  className="form-control" 
-                  multiple=""
-                  onChange={this.handleChange}/>
-              </div>  
-            </form>
+            <Row>
+              <Col span={20} offset={2} className="formColumn">
+                <div className="form-container" style={{backgroundImage: `url(${this.state.imageUrl || this.displayIcons.default.url})`}}> </div>
+                <div>{this.state.loaded}</div>
+                  <form className="form" method="post" action="#" id="#">
+                    <input
+                      type="file" 
+                      className="form-control" 
+                      multiple=""
+                      onChange={this.handleChange}/>
+                  </form>
+
+              </Col>
+            </Row>
+            <Row>
+              <Col span={20} offset={2}>
+                <button 
+                  type="button" 
+                  className="btn"
+                  onClick={this.onClickHandler}>
+                    Upload
+                </button>
+              </Col>
+        </Row>
           </Col>
 	      </Row>
-        <Row>
-          <Col span={12} offset={6}>
-            <button 
-              type="button" 
-              className="btn"
-              onClick={this.onClickHandler}>
-                Upload
-            </button>
-          </Col>
-        </Row>
+
       </div>
         
 
